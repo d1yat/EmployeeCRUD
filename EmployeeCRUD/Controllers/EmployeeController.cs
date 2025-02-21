@@ -1,6 +1,11 @@
 ﻿using EmployeeCRUD.Data;
 using EmployeeCRUD.Models;
 using Microsoft.AspNetCore.Mvc;
+// using System.IO;
+// using iTextSharp.text;
+// using iTextSharp.text.pdf;
+// using iTextSharp.tool.xml;
+// using iTextSharp.text.html.simpleparser;
 
 namespace EmployeeCRUD.Controllers
 {
@@ -61,6 +66,9 @@ namespace EmployeeCRUD.Controllers
         {
             if (ModelState.IsValid)
             {
+                var cdate=DateTime.Now;
+                empobj.RecordCreatedOn = cdate;
+
                 _context.Employees.Update(empobj);
                 _context.SaveChanges();
                 TempData["ResultOk"] = "Data Updated Successfully !";
@@ -77,7 +85,7 @@ namespace EmployeeCRUD.Controllers
                 return NotFound();
             }
             var empfromdb = _context.Employees.Find(id);
-         
+
             if (empfromdb == null)
             {
                 return NotFound();
@@ -100,6 +108,21 @@ namespace EmployeeCRUD.Controllers
             return RedirectToAction("Index");
         }
 
-
+        // [HttpPost]
+        // // [ValidateInput(false)]
+        // public FileResult Export(string GridHtml)
+        // {
+        //     using (MemoryStream stream = new System.IO.MemoryStream())
+        //     {
+        //         StringReader sr = new StringReader(GridHtml);
+        //         Document pdfDoc = new Document(PageSize.A4, 10f, 10f, 100f, 0f);
+        //         pdfDoc.SetPageSize(PageSize.A4.Rotate());
+        //         PdfWriter writer = PdfWriter.GetInstance(pdfDoc, stream);
+        //         pdfDoc.Open();
+        //         XMLWorkerHelper.GetInstance().ParseXHtml(writer, pdfDoc, sr);
+        //         pdfDoc.Close();
+        //         return File(stream.ToArray(), "application/pdf", "Grid.pdf");
+        //     }
+        // }
     }
 }
